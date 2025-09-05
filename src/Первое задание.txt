@@ -1,0 +1,62 @@
+using Microsoft.AspNetCore.Mvc;
+using System;
+
+namespace BackendApi2.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
+    {
+        private static readonly List<string> Summaries = new()
+        {
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
+
+        private readonly ILogger<WeatherForecastController> _logger;
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        {
+            _logger = logger;
+        }
+
+
+        [HttpGet]
+        [HttpGet("{index}")]
+        [HttpGet("find-by-name")]
+        public List<string> Get()
+        {
+            return Summaries;
+        }
+
+        [HttpPost]
+        public IActionResult Add(string name)
+        {
+            Summaries.Add(name);
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult Update(int index, string name)
+        {
+            if (index < 0 || index >= Summaries.Count)
+            {
+                return BadRequest("такой индекс неверный!!!!");
+            }
+
+
+            Summaries[index] = name;
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int index)
+        {
+            if (index < 0 || index >= Summaries.Count)
+            {
+                return BadRequest("НЕПРАВИЛЬНО!!!");
+            }
+            Summaries.RemoveAt(index);
+            return Ok();
+        }
+    }
+}
